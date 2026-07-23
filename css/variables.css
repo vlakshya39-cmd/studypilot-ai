@@ -1,0 +1,38 @@
+/* StudyPilot AI — Design Tokens
+   Single source of truth for colors, fonts, and spacing.
+   Every other CSS file should reference these variables, never hardcode values. */
+
+:root {
+  /* Colors — backgrounds */
+  --bg-primary: #0B1220;
+  --bg-surface: #111827;
+  --card: #1B2536;
+  --border: #263042;
+
+  /* Colors — accents */
+  --teal: #2DD4BF;
+  --teal-deep: #0F766E;
+  --amber: #F59E0B;
+  --violet: #A78BFA;
+
+  /* Colors — text */
+  --text-primary: #F8FAFC;
+  --text-muted: #94A3B8;
+
+  /* Fonts */
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-body: 'Inter', 'Space Grotesk', sans-serif;
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Radius */
+  --radius: 12px;
+}

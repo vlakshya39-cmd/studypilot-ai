@@ -56,6 +56,15 @@ studypilot-ai/
 - **Day 8** (Resources + polish): edits across `js/goals.js`, `js/today.js`, `css/components.css`
 - **Day 9–10**: no new source files — testing, deployment config, and `README.md`
 
+## Day 3 Update — Structure Confirmed As-Built
+
+The structure above was implemented exactly as designed on Day 3, with two small additions not explicitly itemized on Day 2 (neither is a scope change — both were already implied by the Architecture doc):
+
+- **`.env.example`** — a safe-to-commit template documenting the `ANTHROPIC_API_KEY` variable ahead of Day 6, so `.gitignore`/secret handling is verified working from the start rather than set up last-minute.
+- **`netlify.toml`** — the config file Netlify needs to locate the publish directory and functions folder; implied by the Architecture's "Netlify Function" design but not previously listed as its own file.
+
+No other deviations from the original structure.
+
 ## Why This Structure
 
 1. **No build tools, no bundler** — every file is plain HTML/CSS/JS loaded directly via `<script>`/`<link>` tags. Zero configuration to break or debug, which matters given the 1.5–2 hr/day budget.

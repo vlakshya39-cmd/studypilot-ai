@@ -1,0 +1,7 @@
+# StudyPilot AI — Netlify configuration
+# Tells Netlify where the site files live and where serverless functions live.
+# The functions folder is empty/placeholder today — real logic arrives Day 6.
+
+[build]
+  publish = "."
+  functions = "netlify/functions"

@@ -1,0 +1,64 @@
+/* StudyPilot AI — Reusable Components
+   Cards, buttons, empty states. Expanded further on Days 3-8. */
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-5);
+}
+
+.button {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+
+.button:hover {
+  border-color: var(--teal);
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.button--primary {
+  background: var(--teal-deep);
+  border-color: var(--teal-deep);
+  color: var(--text-primary);
+}
+
+.button--primary:hover {
+  border-color: var(--teal);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  color: var(--text-muted);
+  padding: var(--space-6) 0;
+}
+
+.empty-state__title {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.screen-title {
+  font-family: var(--font-body);
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: var(--space-5);
+  color: var(--text-primary);
+}

@@ -20,3 +20,14 @@
 - Committed and pushed all Day 2 docs to GitHub (`d3db62b..07217d6`).
 
 **Status:** On schedule. Implementation begins Day 3.
+
+## Day 3 — Project Setup & Foundation
+- Installed VS Code Live Server extension and Netlify CLI; fixed a Windows PowerShell execution-policy block.
+- Built the app shell: `index.html`, full CSS design system (`variables.css`, `layout.css`, `components.css`), and `js/app.js` tab-switching logic.
+- Added `netlify.toml`, a placeholder `netlify/functions/ask-claude.js`, and `.env.example` ahead of Day 6's AI integration.
+- Verified "Hello World" milestone: app runs via Live Server, all 3 tabs switch correctly, clean console output.
+- Confirmed GitHub connection (already cloned Day 2) and decided on a trunk-based branching strategy (solo build, Netlify auto-deploys from `main`).
+- Produced: `SETUP.md`, `ENVIRONMENT.md`, `DAY3-SUMMARY.md`, updated `PROJECT-STRUCTURE.md`.
+- No Implementation Blueprint changes required — today's work matches the Blueprint's original "Day 2" foundation section exactly.
+
+**Status:** On schedule. First user-facing feature (Goals & Tasks CRUD) begins next session.
