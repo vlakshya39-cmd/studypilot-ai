@@ -36,10 +36,7 @@
 
       <section id="screen-goals" class="screen">
         <h1 class="screen-title">Goals</h1>
-        <div class="empty-state">
-          <div class="empty-state__title">Hello World — Goals screen</div>
-          <p>This is a placeholder. Goal/task creation and management arrive on Day 3's next session (data model + CRUD).</p>
-        </div>
+        <div id="goals-root"></div>
       </section>
 
       <section id="screen-chat" class="screen">
@@ -52,6 +49,9 @@
     </main>
   </div>
 
+  <!-- Load order matters: store.js (data) before goals.js (UI) before app.js (navigation/init) -->
+  <script src="js/store.js"></script>
+  <script src="js/goals.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

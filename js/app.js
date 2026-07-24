@@ -1,15 +1,11 @@
 // StudyPilot AI — app.js
 // Entry point. Handles navigation between the three top-level screens
-// (Today, Goals, Chat). No routing library needed — this is a simple
-// single-page app with three show/hide panels.
-//
-// Data model, CRUD logic, AI integration etc. are NOT wired up yet —
-// this file only proves the app shell + navigation works end-to-end.
-// Days 3 (data model), 4 (Today logic), 5 (progress), 6-7 (AI), 8 (resources)
-// will each add their own dedicated files (store.js, goals.js, today.js, etc.)
-// that this file will eventually import/call into.
+// (Today, Goals, Chat), and initializes the data layer on load.
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Load persisted data (or create default empty state) before anything renders.
+  window.Store.loadState();
+
   const navTabs = document.querySelectorAll('.nav-tab');
   const screens = document.querySelectorAll('.screen');
 
@@ -20,6 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
     navTabs.forEach((tab) => {
       tab.classList.toggle('active', tab.dataset.screen === screenName);
     });
+
+    // Re-render the Goals screen every time it becomes active, so it always
+    // reflects the latest data.
+    if (screenName === 'goals' && window.GoalsScreen) {
+      window.GoalsScreen.render();
+    }
   }
 
   navTabs.forEach((tab) => {

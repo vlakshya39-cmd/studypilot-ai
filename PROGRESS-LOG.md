@@ -31,3 +31,13 @@
 - No Implementation Blueprint changes required — today's work matches the Blueprint's original "Day 2" foundation section exactly.
 
 **Status:** On schedule. First user-facing feature (Goals & Tasks CRUD) begins next session.
+
+## Day 4 — Core Feature Implementation (Goals & Tasks CRUD)
+- Built `js/store.js`: the full data layer — `loadState`/`saveState`, Goal CRUD (`addGoal`, `deleteGoal`), Task CRUD (`addTask`, `editTask`, `deleteTask`), all persisted to `localStorage` under key `studypilot_v1`.
+- Built `js/goals.js`: Goals list view (create/delete goals, progress %) and Goal Detail view (add/check off/delete tasks), fully wired to `store.js`.
+- Updated `js/app.js` to load state on startup and re-render the Goals screen on every tab switch.
+- Updated `index.html` to load the new scripts in the correct order (`store.js` → `goals.js` → `app.js`) and added the `#goals-root` mount point.
+- Verified end-to-end: goal creation, task creation, checkbox toggling, progress % calculation, and full data persistence across page refresh.
+- This completes the Blueprint's "Day 3 — Goals & Tasks Data Model + CRUD UI" section in full.
+
+**Status:** On schedule. Today (Blueprint's Day 4 — Today View & Prioritization Logic) begins next session.
