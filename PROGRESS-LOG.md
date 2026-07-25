@@ -41,3 +41,14 @@
 - This completes the Blueprint's "Day 3 — Goals & Tasks Data Model + CRUD UI" section in full.
 
 **Status:** On schedule. Today (Blueprint's Day 4 — Today View & Prioritization Logic) begins next session.
+
+## Day 5 — Continue Core Feature Development (Today View + Progress Tracking)
+- Upgraded `js/store.js`: real `getTodayTasks()` prioritization (overdue-first, then round-robin across goals, capped at 7), plus `getCompletionsByDate()`, `getCurrentStreak()`, `getHeatmapData()`.
+- Built `js/today.js`: proactive Today screen — prioritized task list, checkbox toggling synced with Goals screen, empty states ("Nothing scheduled" / "All caught up!").
+- Built `js/progress.js`: real streak badge (replacing the Day 4 placeholder) and a 13-week GitHub-style calendar heatmap with hover tooltips.
+- Updated `app.js`/`index.html` to wire both new screens into the existing navigation, load order, and default Today landing view.
+- Verified end-to-end: Today prioritization, checkbox sync between Today/Goals, streak counting (confirmed 2-day streak), heatmap rendering and shading — plus a full regression check confirming Goals/Tasks CRUD from Day 4 still works unchanged.
+- No paid APIs or external services used — 100% client-side, consistent with the whole project so far.
+- This completes the Blueprint's "Day 4 — Today View & Prioritization Logic" and "Day 5 — Streaks & Calendar Heatmap" sections in one session.
+
+**Status:** Ahead of schedule (two Blueprint days completed in one session). AI integration (Claude API via Netlify Function) begins next session.

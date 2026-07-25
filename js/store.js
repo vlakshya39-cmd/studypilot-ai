@@ -3,6 +3,7 @@
 // localStorage directly. Every screen calls the functions exported here.
 
 const STORAGE_KEY = 'studypilot_v1';
+const TODAY_TASK_LIMIT = 7; // keep the Today list focused, not overwhelming
 
 let state = null; // in-memory cache, populated by loadState()
 
@@ -48,6 +49,19 @@ function getState() {
 
 function makeId() {
   return crypto.randomUUID();
+}
+
+// ---------- Date helpers (local-date-string based, to avoid timezone bugs) ----------
+
+function todayDateString() {
+  return dateToLocalString(new Date());
+}
+
+function dateToLocalString(d) {
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
 }
 
 // ---------- Goal operations ----------
@@ -146,17 +160,102 @@ function deleteTask(taskId) {
   return true;
 }
 
-// ---------- Query helpers (used by later days too) ----------
+// ---------- Today View — Prioritization Logic ----------
 
 function getTodayTasks() {
-  // Placeholder-safe minimal version — full prioritization logic arrives Day 4 (Blueprint numbering)/Day 5 (capstone).
-  const todos = [];
-  getGoals().forEach((goal) => {
-    goal.tasks
-      .filter((t) => t.status === 'todo')
-      .forEach((t) => todos.push({ ...t, goalTitle: goal.title }));
+  const today = todayDateString();
+  const goals = getGoals();
+
+  const dueTasks = [];
+  const unscheduledByGoal = [];
+
+  goals.forEach((goal) => {
+    const unscheduledForThisGoal = [];
+    goal.tasks.forEach((task) => {
+      if (task.status !== 'todo') return;
+      if (task.scheduledDate && task.scheduledDate <= today) {
+        dueTasks.push({ ...task, goalTitle: goal.title });
+      } else if (!task.scheduledDate) {
+        unscheduledForThisGoal.push({ ...task, goalTitle: goal.title });
+      }
+    });
+    if (unscheduledForThisGoal.length > 0) {
+      unscheduledByGoal.push({ tasks: unscheduledForThisGoal });
+    }
   });
-  return todos;
+
+  dueTasks.sort((a, b) => (a.scheduledDate < b.scheduledDate ? -1 : 1));
+
+  const roundRobin = [];
+  let anyLeft = true;
+  while (anyLeft) {
+    anyLeft = false;
+    for (const group of unscheduledByGoal) {
+      if (group.tasks.length > 0) {
+        roundRobin.push(group.tasks.shift());
+        anyLeft = true;
+      }
+    }
+  }
+
+  const combined = [...dueTasks, ...roundRobin];
+  return combined.slice(0, TODAY_TASK_LIMIT);
+}
+
+// ---------- Progress — Streaks & Heatmap ----------
+
+function getCompletionsByDate() {
+  const map = {};
+  getGoals().forEach((goal) => {
+    goal.tasks.forEach((task) => {
+      if (task.status === 'done' && task.completedAt) {
+        const dateStr = dateToLocalString(new Date(task.completedAt));
+        map[dateStr] = (map[dateStr] || 0) + 1;
+      }
+    });
+  });
+  return map;
+}
+
+function getCurrentStreak() {
+  const completions = getCompletionsByDate();
+  let streak = 0;
+  const cursor = new Date();
+
+  // If today has no completions yet, don't break an existing streak —
+  // just start counting from yesterday instead.
+  const todayStr = dateToLocalString(cursor);
+  if (!completions[todayStr]) {
+    cursor.setDate(cursor.getDate() - 1);
+  }
+
+  while (true) {
+    const dStr = dateToLocalString(cursor);
+    if (completions[dStr] && completions[dStr] > 0) {
+      streak++;
+      cursor.setDate(cursor.getDate() - 1);
+    } else {
+      break;
+    }
+  }
+  return streak;
+}
+
+// Returns an array of { date, count } for the last `weeks` weeks (default 13),
+// oldest first, suitable for rendering a GitHub-style heatmap grid.
+function getHeatmapData(weeks = 13) {
+  const completions = getCompletionsByDate();
+  const days = weeks * 7;
+  const result = [];
+  const cursor = new Date();
+  cursor.setDate(cursor.getDate() - (days - 1));
+
+  for (let i = 0; i < days; i++) {
+    const dStr = dateToLocalString(cursor);
+    result.push({ date: dStr, count: completions[dStr] || 0 });
+    cursor.setDate(cursor.getDate() + 1);
+  }
+  return result;
 }
 
 // ---------- Exports (attached to window since this is plain script, no modules/bundler) ----------
@@ -173,4 +272,8 @@ window.Store = {
   editTask,
   deleteTask,
   getTodayTasks,
+  todayDateString,
+  getCompletionsByDate,
+  getCurrentStreak,
+  getHeatmapData,
 };

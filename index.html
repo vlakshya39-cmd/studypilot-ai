@@ -27,11 +27,12 @@
 
     <main class="main-content">
       <section id="screen-today" class="screen active">
-        <h1 class="screen-title">Today</h1>
-        <div class="empty-state">
-          <div class="empty-state__title">Hello World — Today screen</div>
-          <p>This is a placeholder. The real prioritized task list and streak/heatmap arrive on Days 4-5.</p>
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:var(--space-5);">
+          <h1 class="screen-title" style="margin-bottom:0;">Today</h1>
+          <div id="streak-badge" style="font-family:var(--font-mono); color:var(--amber); font-size:14px;">🔥 0-day streak</div>
         </div>
+        <div id="today-root"></div>
+        <div id="heatmap-root"></div>
       </section>
 
       <section id="screen-goals" class="screen">
@@ -49,8 +50,10 @@
     </main>
   </div>
 
-  <!-- Load order matters: store.js (data) before goals.js (UI) before app.js (navigation/init) -->
+  <!-- Load order matters: store.js (data) before screen files before app.js (navigation/init) -->
   <script src="js/store.js"></script>
+  <script src="js/today.js"></script>
+  <script src="js/progress.js"></script>
   <script src="js/goals.js"></script>
   <script src="js/app.js"></script>
 </body>

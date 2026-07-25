@@ -17,8 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
       tab.classList.toggle('active', tab.dataset.screen === screenName);
     });
 
-    // Re-render the Goals screen every time it becomes active, so it always
+    // Re-render the active screen every time it's shown, so it always
     // reflects the latest data.
+    if (screenName === 'today') {
+      if (window.TodayScreen) window.TodayScreen.render();
+      if (window.ProgressScreen) window.ProgressScreen.render();
+    }
     if (screenName === 'goals' && window.GoalsScreen) {
       window.GoalsScreen.render();
     }
