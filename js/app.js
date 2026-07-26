@@ -3,7 +3,6 @@
 // (Today, Goals, Chat), and initializes the data layer on load.
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Load persisted data (or create default empty state) before anything renders.
   window.Store.loadState();
 
   const navTabs = document.querySelectorAll('.nav-tab');
@@ -17,14 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
       tab.classList.toggle('active', tab.dataset.screen === screenName);
     });
 
-    // Re-render the active screen every time it's shown, so it always
-    // reflects the latest data.
     if (screenName === 'today') {
       if (window.TodayScreen) window.TodayScreen.render();
       if (window.ProgressScreen) window.ProgressScreen.render();
     }
     if (screenName === 'goals' && window.GoalsScreen) {
       window.GoalsScreen.render();
+    }
+    if (screenName === 'chat' && window.ChatScreen) {
+      window.ChatScreen.render();
     }
   }
 
@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Today is the default landing screen (per PRD — proactive by default).
   activateScreen('today');
 
   console.log('StudyPilot AI — app shell loaded successfully.');

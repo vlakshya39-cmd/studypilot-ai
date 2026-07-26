@@ -77,7 +77,10 @@ const GoalsScreen = (function () {
               (task) => `
           <div class="card task-row" data-task-id="${task.id}" style="margin-bottom:var(--space-2); display:flex; align-items:center; gap:var(--space-3);">
             <input type="checkbox" class="task-checkbox" data-task-id="${task.id}" ${task.status === 'done' ? 'checked' : ''} style="width:18px; height:18px;" />
-            <div style="flex:1; ${task.status === 'done' ? 'color:var(--text-muted); text-decoration:line-through;' : ''}">${escapeHtml(task.title)}</div>
+            <div style="flex:1; ${task.status === 'done' ? 'color:var(--text-muted); text-decoration:line-through;' : ''}">
+              ${escapeHtml(task.title)}
+              ${task.scheduledDate ? `<span style="color:var(--teal); font-size:12px; margin-left:8px; font-family:var(--font-mono);">📅 ${task.scheduledDate}</span>` : ''}
+            </div>
             <button class="button delete-task-btn" data-task-id="${task.id}">Delete</button>
           </div>
         `
@@ -86,7 +89,11 @@ const GoalsScreen = (function () {
 
     return `
       <button class="button" id="back-to-goals-btn" style="margin-bottom:var(--space-4);">&larr; Back to Goals</button>
-      <h2 style="font-family:var(--font-body); font-size:20px; margin-bottom:var(--space-4);">${escapeHtml(goal.title)}</h2>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-4);">
+        <h2 style="font-family:var(--font-body); font-size:20px; margin:0;">${escapeHtml(goal.title)}</h2>
+        <button class="button button--primary" id="organize-ai-btn" data-goal-id="${goal.id}">✨ Organize with AI</button>
+      </div>
+      <div id="organize-ai-status" style="margin-bottom:var(--space-3); font-size:13px; color:var(--text-muted);"></div>
 
       <div class="card" style="margin-bottom:var(--space-5);">
         <form id="new-task-form" style="display:flex; gap:var(--space-2);">
@@ -122,7 +129,6 @@ const GoalsScreen = (function () {
 
     root.querySelectorAll('.goal-card').forEach((card) => {
       card.addEventListener('click', (e) => {
-        // avoid double-trigger when clicking the buttons inside the card
         if (e.target.closest('button')) return;
         activeGoalId = card.dataset.goalId;
         render();
@@ -173,6 +179,28 @@ const GoalsScreen = (function () {
         }
       });
     });
+
+    const organizeBtn = root.querySelector('#organize-ai-btn');
+    if (organizeBtn) {
+      organizeBtn.addEventListener('click', async () => {
+        const statusBox = root.querySelector('#organize-ai-status');
+        organizeBtn.disabled = true;
+        organizeBtn.textContent = 'Organizing...';
+        statusBox.textContent = 'Asking AI to schedule your tasks...';
+
+        const goal = window.Store.getGoalById(organizeBtn.dataset.goalId);
+        const result = await window.organizeGoalWithAI(goal);
+
+        if (result.success) {
+          statusBox.textContent = '✅ Tasks scheduled! Check the Today screen.';
+          render();
+        } else {
+          statusBox.textContent = '⚠️ ' + result.error;
+          organizeBtn.disabled = false;
+          organizeBtn.textContent = '✨ Organize with AI';
+        }
+      });
+    }
   }
 
   function escapeHtml(str) {

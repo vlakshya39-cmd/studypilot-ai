@@ -42,19 +42,22 @@
 
       <section id="screen-chat" class="screen">
         <h1 class="screen-title">Chat</h1>
-        <div class="empty-state">
-          <div class="empty-state__title">Hello World — Chat screen</div>
-          <p>This is a placeholder. AI-powered chat guidance arrives on Day 7.</p>
-        </div>
+        <div id="chat-root"></div>
       </section>
     </main>
   </div>
 
-  <!-- Load order matters: store.js (data) before screen files before app.js (navigation/init) -->
+  <footer style="text-align:center; padding:var(--space-4); color:var(--text-muted); font-size:12px; border-top:1px solid var(--border); background:var(--bg-primary);">
+    Built with Claude as part of the AB Talks 60-Day Claude AI Challenge.
+  </footer>
+
+  <!-- Load order matters: store.js (data) before ai.js before screen files before app.js (navigation/init) -->
   <script src="js/store.js"></script>
+  <script src="js/ai.js"></script>
   <script src="js/today.js"></script>
   <script src="js/progress.js"></script>
   <script src="js/goals.js"></script>
+  <script src="js/chat.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
