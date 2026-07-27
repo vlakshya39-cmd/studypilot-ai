@@ -4,6 +4,7 @@
 
 const GoalsScreen = (function () {
   let activeGoalId = null; // null = showing goal list; otherwise showing detail
+  let resourceFormTaskId = null; // task id currently showing the add-resource inline form
 
   function render() {
     const root = document.getElementById('goals-root');
@@ -73,18 +74,32 @@ const GoalsScreen = (function () {
       goal.tasks.length === 0
         ? `<div class="empty-state"><p>Add your first task above to get going.</p></div>`
         : goal.tasks
-            .map(
-              (task) => `
-          <div class="card task-row" data-task-id="${task.id}" style="margin-bottom:var(--space-2); display:flex; align-items:center; gap:var(--space-3);">
-            <input type="checkbox" class="task-checkbox" data-task-id="${task.id}" ${task.status === 'done' ? 'checked' : ''} style="width:18px; height:18px;" />
+            .map((task) => {
+              const resourceBadge = task.resource
+                ? `<div style="margin-top:4px; font-size:12px; color:var(--text-muted); display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                     <span>${task.resource.type === 'link' ? '🔗' : '📝'}</span>
+                     ${
+                       task.resource.type === 'link'
+                         ? `<a href="${escapeHtml(task.resource.value)}" target="_blank" rel="noopener" style="color:var(--teal); text-decoration:none;">${escapeHtml(task.resource.value)}</a>`
+                         : `<span>${escapeHtml(task.resource.value)}</span>`
+                     }
+                     <button class="button remove-resource-btn" data-task-id="${task.id}" style="padding:2px 6px; font-size:11px;">✕</button>
+                   </div>`
+                : `<button class="button add-resource-btn" data-task-id="${task.id}" style="margin-top:4px; padding:2px 8px; font-size:11px;">+ Add link/note</button>`;
+
+              return `
+          <div class="card task-row" data-task-id="${task.id}" style="margin-bottom:var(--space-2); display:flex; align-items:flex-start; gap:var(--space-3);">
+            <input type="checkbox" class="task-checkbox" data-task-id="${task.id}" ${task.status === 'done' ? 'checked' : ''} style="width:18px; height:18px; margin-top:2px;" />
             <div style="flex:1; ${task.status === 'done' ? 'color:var(--text-muted); text-decoration:line-through;' : ''}">
               ${escapeHtml(task.title)}
               ${task.scheduledDate ? `<span style="color:var(--teal); font-size:12px; margin-left:8px; font-family:var(--font-mono);">📅 ${task.scheduledDate}</span>` : ''}
+              ${resourceBadge}
+              ${renderResourceForm(task.id)}
             </div>
             <button class="button delete-task-btn" data-task-id="${task.id}">Delete</button>
           </div>
-        `
-            )
+        `;
+            })
             .join('');
 
     return `
@@ -104,6 +119,22 @@ const GoalsScreen = (function () {
       </div>
 
       <div>${taskRows}</div>
+    `;
+  }
+
+  function renderResourceForm(taskId) {
+    if (resourceFormTaskId !== taskId) return '';
+    return `
+      <form class="resource-form" data-task-id="${taskId}" style="margin-top:6px; display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+        <select class="resource-type-select" style="padding:4px 6px; border-radius:var(--radius); border:1px solid var(--border); background:var(--bg-surface); color:var(--text-primary); font-size:12px;">
+          <option value="link">Link</option>
+          <option value="note">Note</option>
+        </select>
+        <input type="text" class="resource-value-input" placeholder="URL or note text" maxlength="500"
+          style="flex:1; min-width:140px; padding:4px 8px; border-radius:var(--radius); border:1px solid var(--border); background:var(--bg-surface); color:var(--text-primary); font-size:12px;" />
+        <button type="submit" class="button" style="padding:3px 10px; font-size:12px;">Save</button>
+        <button type="button" class="cancel-resource-btn" data-task-id="${taskId}" style="padding:3px 10px; font-size:12px;">Cancel</button>
+      </form>
     `;
   }
 
@@ -177,6 +208,43 @@ const GoalsScreen = (function () {
           window.Store.deleteTask(btn.dataset.taskId);
           render();
         }
+      });
+    });
+
+    root.querySelectorAll('.add-resource-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        resourceFormTaskId = btn.dataset.taskId;
+        render();
+      });
+    });
+
+    root.querySelectorAll('.cancel-resource-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        resourceFormTaskId = null;
+        render();
+      });
+    });
+
+    root.querySelectorAll('.resource-form').forEach((form) => {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const taskId = form.dataset.taskId;
+        const type = form.querySelector('.resource-type-select').value;
+        const value = form.querySelector('.resource-value-input').value;
+        const result = window.Store.setTaskResource(taskId, { type, value });
+        if (result) {
+          resourceFormTaskId = null;
+          render();
+        } else {
+          alert('Please enter a valid link or note (max 500 characters).');
+        }
+      });
+    });
+
+    root.querySelectorAll('.remove-resource-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        window.Store.removeTaskResource(btn.dataset.taskId);
+        render();
       });
     });
 

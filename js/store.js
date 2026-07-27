@@ -160,6 +160,36 @@ function deleteTask(taskId) {
   return true;
 }
 
+// ---------- Resource operations ----------
+
+function setTaskResource(taskId, resource) {
+  const { task } = findTaskAndGoal(taskId);
+  if (!task) {
+    console.warn('StudyPilot: setTaskResource - task not found', taskId);
+    return null;
+  }
+  const type = resource && resource.type;
+  const value = resource && (resource.value || '').trim();
+  if ((type !== 'link' && type !== 'note') || !value || value.length > 500) {
+    console.warn('StudyPilot: setTaskResource - invalid resource', resource);
+    return null;
+  }
+  task.resource = { type, value };
+  saveState();
+  return task;
+}
+
+function removeTaskResource(taskId) {
+  const { task } = findTaskAndGoal(taskId);
+  if (!task) {
+    console.warn('StudyPilot: removeTaskResource - task not found', taskId);
+    return false;
+  }
+  task.resource = null;
+  saveState();
+  return true;
+}
+
 // ---------- Today View — Prioritization Logic ----------
 
 function getTodayTasks() {
@@ -271,6 +301,8 @@ window.Store = {
   addTask,
   editTask,
   deleteTask,
+  setTaskResource,
+  removeTaskResource,
   getTodayTasks,
   todayDateString,
   getCompletionsByDate,
