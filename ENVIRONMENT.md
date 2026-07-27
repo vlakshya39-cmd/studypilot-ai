@@ -16,9 +16,17 @@ All tools, configuration files, and environment variables used in this project.
 
 | Variable | Where it's used | When it's needed | Committed to Git? |
 |---|---|---|---|
-| `ANTHROPIC_API_KEY` | `netlify/functions/ask-claude.js` | Day 6 (Claude API integration) | **Never** — kept in local `.env` (git-ignored) and set separately in Netlify's dashboard for production |
+| `GEMINI_API_KEY` | `netlify/functions/ask-ai.js` | Day 6 onward (AI features) | **Never** — kept in local `.env` (git-ignored) and set separately in Netlify's dashboard for production |
+
+**Note:** The project originally planned to use the Anthropic Claude API (per Day 2's Architecture). On Day 6, this was switched to Google's Gemini API, since Claude API has no permanent free tier and the capstone requires $0-cost tools. The architecture is unchanged — only the AI vendor and the function name (`ask-claude.js` → `ask-ai.js`) changed. Model in use: `gemini-flash-latest`.
 
 `.env.example` documents this variable with a placeholder value and IS safe to commit — it contains no real secret, only the variable name.
+
+## Live Deployment
+
+- **URL:** https://studypilot-ai-lakshya.netlify.app/
+- **Hosting:** Netlify (free tier), auto-deploys from GitHub `main` branch
+- **AI provider:** Google Gemini API (free tier), key stored as a Netlify environment variable
 
 ## Configuration Files
 

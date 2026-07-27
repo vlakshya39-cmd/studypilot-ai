@@ -52,3 +52,18 @@
 - This completes the Blueprint's "Day 4 — Today View & Prioritization Logic" and "Day 5 — Streaks & Calendar Heatmap" sections in one session.
 
 **Status:** Ahead of schedule (two Blueprint days completed in one session). AI integration (Claude API via Netlify Function) begins next session.
+
+## Day 6 — Complete the MVP & Deliver a Working Demo
+- **Design change (approved):** switched AI provider from Anthropic Claude API to Google Gemini API, since Claude API has no permanent free tier and today's requirements mandated $0-cost tools only. Architecture unchanged — only the vendor and function name (`ask-claude.js` → `ask-ai.js`) changed.
+- Got a free Gemini API key (aistudio.google.com), configured locally via `.env` and in Netlify's dashboard for production.
+- Built `netlify/functions/ask-ai.js`: secure serverless proxy to Gemini, with input validation and error handling.
+- Built `js/ai.js`: client helper plus two real AI features — `organizeGoalWithAI()` (schedules a goal's tasks across days) and `getChatResponse()` (context-aware chat grounded in real user data).
+- Built `js/chat.js`: full chat UI with conversation history, loading states, and graceful error handling.
+- Updated `js/goals.js` with a working "✨ Organize with AI" button.
+- Added the required footer: "Built with Claude as part of the AB Talks 60-Day Claude AI Challenge."
+- Debugged through several real issues: incorrect local file paths from zip extraction, an initial zero-quota model, and a deprecated model name — resolved by querying Google's live model list and switching to the `gemini-flash-latest` alias.
+- **Deployed the full MVP live to Netlify**: https://studypilot-ai-lakshya.netlify.app/
+- Verified the complete user flow works on the live production site: Goals CRUD, AI plan organization, Today prioritization, streaks/heatmap, and AI chat — all confirmed working with the production environment variable.
+- This completes the Blueprint's Day 6 (AI connection) and Day 7 (AI features) sections, plus an early version of Day 9 (deployment), in one session.
+
+**Status:** MVP complete and live. Remaining work: resource attachment (link/note per task), full UI polish pass, and final testing/documentation — originally Blueprint Days 8 and 10.

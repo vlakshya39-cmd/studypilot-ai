@@ -102,8 +102,10 @@ Both are additive — if the Claude API is unreachable, Goals/Tasks/Today/Progre
 | Service | Purpose | Free tier limits to be aware of |
 |---|---|---|
 | **Netlify** | Static hosting + serverless function + GitHub auto-deploy | Free tier: 100GB bandwidth/mo, 125k function invocations/mo — far beyond a personal-scale project |
-| **Anthropic Claude API** | Plan customization + chat guidance | Usage-based; monitor usage in the Anthropic console |
+| **Google Gemini API** | Plan customization + chat guidance (switched from Claude API on Day 6 — see note below) | Free tier: no credit card required, generous daily request quota |
 | **Google Fonts CDN** | Inter, Space Grotesk, JetBrains Mono | Free, no limits for this scale |
+
+**Day 6 update:** This project originally planned to use the Anthropic Claude API. It was switched to Google's Gemini API on Day 6 because Claude API has no permanent free tier, and the capstone requires $0-cost tools throughout. The architecture, request lifecycle, and function shape are otherwise unchanged — only the vendor and function filename (`ask-claude.js` → `ask-ai.js`) changed. Model in use: `gemini-flash-latest`.
 
 ## 7. Why No Traditional Backend/Database
 
