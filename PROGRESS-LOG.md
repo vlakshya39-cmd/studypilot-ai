@@ -67,3 +67,14 @@
 - This completes the Blueprint's Day 6 (AI connection) and Day 7 (AI features) sections, plus an early version of Day 9 (deployment), in one session.
 
 **Status:** MVP complete and live. Remaining work: resource attachment (link/note per task), full UI polish pass, and final testing/documentation — originally Blueprint Days 8 and 10.
+
+## Day 7 — Product Refinement & User Experience
+- Built the resource attachment feature (link/note per task): added `setTaskResource()` and `removeTaskResource()` to `js/store.js`, with validation matching `SCHEMA.md`'s constraints, plus a full UI in `js/goals.js` (inline add/edit form, badge display, remove control).
+- **Caught and fixed a real gap:** this feature was designed and "delivered" in an earlier session, but it was never actually committed to GitHub — the live `goals.js`/`store.js` had no trace of it. Re-verified against the live repo files before rebuilding it for real, confirmed working locally and in production this time.
+- Completed a full UI/UX refinement pass on `css/components.css`: hover states on cards/tasks/buttons, smoother transitions, a springy checkbox interaction, a fade-in animation for chat bubbles, mobile overflow fixes (task rows, resource links, chat bubble width), and keyboard-accessible focus-visible outlines on all interactive elements.
+- Wired a loading spinner into the "✨ Organize with AI" button so async AI calls have a real visual loading state, not just changed button text.
+- Verified every existing feature still works after all changes: Chat (AI reply + animation), Organize with AI (spinner + reschedule), adding/deleting goals, adding/removing task resources, and the Today/Progress views.
+- Renamed the day-folder from the Blueprint's internal `day07` naming to `Day57` to correctly match the running 60-Day Challenge day count.
+- This completes the Blueprint's Day 8 section (Resource Attachment + Full Polish Pass) in full, including the accessibility and loading-state items that were initially missed.
+
+**Status:** On schedule. Remaining: final full testing pass and documentation cleanup (Blueprint Day 10) before the capstone closes.
