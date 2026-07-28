@@ -21,7 +21,7 @@ const GoalsScreen = (function () {
     const newGoalForm = `
       <div class="card" style="margin-bottom:var(--space-5);">
         <form id="new-goal-form" style="display:flex; gap:var(--space-2);">
-          <input type="text" id="new-goal-input" placeholder="e.g. Python + DSA"
+          <input type="text" id="new-goal-input" placeholder="e.g. Python + DSA" maxlength="80" aria-label="New goal title"
             style="flex:1; padding:var(--space-2) var(--space-3); border-radius:var(--radius); border:1px solid var(--border); background:var(--bg-surface); color:var(--text-primary); font-family:var(--font-body); font-size:14px;" />
           <button type="submit" class="button button--primary">+ New Goal</button>
         </form>
@@ -79,7 +79,7 @@ const GoalsScreen = (function () {
                 ? `<div style="margin-top:4px; font-size:12px; color:var(--text-muted); display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
                      <span>${task.resource.type === 'link' ? '🔗' : '📝'}</span>
                      ${
-                       task.resource.type === 'link'
+                       task.resource.type === 'link' && isSafeHttpUrl(task.resource.value)
                          ? `<a href="${escapeHtml(task.resource.value)}" target="_blank" rel="noopener" style="color:var(--teal); text-decoration:none;">${escapeHtml(task.resource.value)}</a>`
                          : `<span>${escapeHtml(task.resource.value)}</span>`
                      }
@@ -112,7 +112,7 @@ const GoalsScreen = (function () {
 
       <div class="card" style="margin-bottom:var(--space-5);">
         <form id="new-task-form" style="display:flex; gap:var(--space-2);">
-          <input type="text" id="new-task-input" placeholder="Add a task..."
+          <input type="text" id="new-task-input" placeholder="Add a task..." maxlength="140" aria-label="New task title"
             style="flex:1; padding:var(--space-2) var(--space-3); border-radius:var(--radius); border:1px solid var(--border); background:var(--bg-surface); color:var(--text-primary); font-family:var(--font-body); font-size:14px;" />
           <button type="submit" class="button button--primary">Add</button>
         </form>
@@ -120,6 +120,19 @@ const GoalsScreen = (function () {
 
       <div>${taskRows}</div>
     `;
+  }
+
+  // Security fix (Day 8 QA pass): only ever render a resource as a clickable
+  // <a href> if it's a genuine http(s) URL. Without this check, someone could
+  // save a "link" resource with a javascript: URL, which would execute when
+  // clicked. Anything that isn't http/https is shown as plain (safe) text.
+  function isSafeHttpUrl(value) {
+    try {
+      const url = new URL(value);
+      return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch {
+      return false;
+    }
   }
 
   function renderResourceForm(taskId) {
@@ -147,7 +160,11 @@ const GoalsScreen = (function () {
         e.preventDefault();
         const input = root.querySelector('#new-goal-input');
         const created = window.Store.addGoal(input.value);
-        if (created) render();
+        if (created) {
+          render();
+        } else {
+          alert('Please enter a goal title (1–80 characters).');
+        }
       });
     }
 
@@ -190,7 +207,11 @@ const GoalsScreen = (function () {
         e.preventDefault();
         const input = root.querySelector('#new-task-input');
         const created = window.Store.addTask(activeGoalId, input.value);
-        if (created) render();
+        if (created) {
+          render();
+        } else {
+          alert('Please enter a task title (1–140 characters).');
+        }
       });
     }
 
@@ -231,6 +252,10 @@ const GoalsScreen = (function () {
         const taskId = form.dataset.taskId;
         const type = form.querySelector('.resource-type-select').value;
         const value = form.querySelector('.resource-value-input').value;
+        if (type === 'link' && value && !isSafeHttpUrl(value)) {
+          alert('Please enter a valid web link starting with http:// or https://');
+          return;
+        }
         const result = window.Store.setTaskResource(taskId, { type, value });
         if (result) {
           resourceFormTaskId = null;

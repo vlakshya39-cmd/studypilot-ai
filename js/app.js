@@ -13,7 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
       screen.classList.toggle('active', screen.id === `screen-${screenName}`);
     });
     navTabs.forEach((tab) => {
-      tab.classList.toggle('active', tab.dataset.screen === screenName);
+      const isActive = tab.dataset.screen === screenName;
+      tab.classList.toggle('active', isActive);
+      // Accessibility fix (Day 8 QA pass): screen readers had no way to know
+      // which tab was currently selected. aria-current="page" fixes that.
+      if (isActive) {
+        tab.setAttribute('aria-current', 'page');
+      } else {
+        tab.removeAttribute('aria-current');
+      }
     });
 
     if (screenName === 'today') {

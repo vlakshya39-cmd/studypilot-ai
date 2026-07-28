@@ -36,7 +36,8 @@ const TodayScreen = (function () {
       .map(
         (task) => `
         <div class="card task-row" data-task-id="${task.id}" style="margin-bottom:var(--space-2); display:flex; align-items:center; gap:var(--space-3);">
-          <input type="checkbox" class="today-task-checkbox" data-task-id="${task.id}" style="width:18px; height:18px;" />
+          <input type="checkbox" class="today-task-checkbox" data-task-id="${task.id}"
+            aria-label="Mark '${escapeHtml(task.title)}' as done" style="width:18px; height:18px;" />
           <div style="flex:1;">
             <div style="font-size:12px; color:var(--teal); font-family:var(--font-mono); margin-bottom:2px;">${escapeHtml(task.goalTitle)}</div>
             <div>${escapeHtml(task.title)}</div>
@@ -55,9 +56,13 @@ const TodayScreen = (function () {
   function attachEvents(root) {
     root.querySelectorAll('.today-task-checkbox').forEach((box) => {
       box.addEventListener('change', () => {
-        window.Store.editTask(box.dataset.taskId, { status: 'done' });
+        // Bug fix (Day 8 QA pass): this used to always set status to 'done'
+        // regardless of the checkbox's actual checked state, so unchecking
+        // a task did nothing. Now it correctly mirrors the checkbox.
+        const newStatus = box.checked ? 'done' : 'todo';
+        window.Store.editTask(box.dataset.taskId, { status: newStatus });
         render(); // re-render Today
-        if (window.ProgressScreen) window.ProgressScreen.render(); // keep streak/heatmap in sync (Day 5/Blueprint's Day 5 adds this file)
+        if (window.ProgressScreen) window.ProgressScreen.render(); // keep streak/heatmap in sync
       });
     });
 
