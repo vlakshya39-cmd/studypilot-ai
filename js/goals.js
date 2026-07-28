@@ -253,7 +253,7 @@ const GoalsScreen = (function () {
       organizeBtn.addEventListener('click', async () => {
         const statusBox = root.querySelector('#organize-ai-status');
         organizeBtn.disabled = true;
-        organizeBtn.textContent = 'Organizing...';
+        organizeBtn.innerHTML = '<span class="spinner"></span>Organizing...';
         statusBox.textContent = 'Asking AI to schedule your tasks...';
 
         const goal = window.Store.getGoalById(organizeBtn.dataset.goalId);

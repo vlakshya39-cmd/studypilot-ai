@@ -160,3 +160,17 @@ select:focus {
     max-width: 88% !important;
   }
 }
+/* --- Day 7 addendum: accessibility focus states --- */
+
+.button:focus-visible,
+input[type="text"]:focus-visible,
+select:focus-visible,
+input[type="checkbox"]:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.button:focus-visible {
+  border-color: var(--teal);
+}
