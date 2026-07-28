@@ -78,3 +78,33 @@
 - This completes the Blueprint's Day 8 section (Resource Attachment + Full Polish Pass) in full, including the accessibility and loading-state items that were initially missed.
 
 **Status:** On schedule. Remaining: final full testing pass and documentation cleanup (Blueprint Day 10) before the capstone closes.
+
+## Day 8 — Testing, Debugging & Production Optimization
+- Performed a full QA/security/performance review of every file in the project
+  (`store.js`, `goals.js`, `today.js`, `chat.js`, `ai.js`, `progress.js`, `app.js`,
+  `index.html`, `ask-ai.js`, both CSS files) before making any changes.
+- **Security fix:** resource links were rendered as clickable `<a href>` without
+  checking the URL scheme, allowing a `javascript:` URL to be saved as a "link"
+  resource and execute when clicked. Added `isSafeHttpUrl()` in `js/goals.js` —
+  only genuine `http`/`https` URLs are ever rendered as clickable links; anything
+  else is rejected with a clear error message.
+- **Bug fix:** the Today screen's checkbox always set a task to "done" regardless
+  of whether it was being checked or unchecked, so unchecking a task silently did
+  nothing. Fixed in `js/today.js` to correctly mirror the checkbox's actual state
+  (matching the already-correct logic in `js/goals.js`).
+- **UX fix:** adding a goal or task with an empty or over-length title failed
+  silently with no feedback. Both forms in `js/goals.js` now show a clear error
+  message explaining the valid input range.
+- **Accessibility fixes:** added `aria-current="page"` to the active nav tab in
+  `js/app.js`, and `aria-label`/`maxlength` attributes to all title inputs and
+  checkboxes across `js/goals.js` and `js/today.js`.
+- Performed a full end-to-end walkthrough on the live production site: Today
+  (checkbox fix verified), Goals (validation + resource security fix verified),
+  Organize with AI (spinner + scheduling), and Chat (AI reply) — all confirmed
+  working with zero console errors (one harmless, purely cosmetic favicon 404
+  noted and left as a known minor item, not a functional issue).
+- This completes the Blueprint's Day 10 section — final testing, debugging, and
+  production-readiness pass — ahead of the capstone's official close.
+
+**Status:** Application reviewed and verified production-ready. No blocking issues
+remain. Remaining before formal launch: optional favicon addition (cosmetic only).
