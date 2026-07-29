@@ -1,7 +1,22 @@
 # StudyPilot AI — Netlify configuration
 # Tells Netlify where the site files live and where serverless functions live.
-# The functions folder is empty/placeholder today — real logic arrives Day 6.
+# The "ask-ai" function proxies requests to the Gemini API so the API key
+# never reaches the browser — see netlify/functions/ask-ai.js.
 
 [build]
   publish = "."
   functions = "netlify/functions"
+
+# Basic production security headers.
+# - X-Content-Type-Options: stops the browser from guessing file types in a
+#   way that could be exploited.
+# - X-Frame-Options: stops the site from being embedded in a hidden iframe on
+#   another site (clickjacking protection).
+# - Referrer-Policy: avoids leaking the full URL (which could include task
+#   titles in some edge cases) to third-party sites when a link is clicked.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
