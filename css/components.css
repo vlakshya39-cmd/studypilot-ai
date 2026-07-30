@@ -1,6 +1,32 @@
 /* StudyPilot AI — Reusable Components
    Cards, buttons, empty states, task rows, chat bubbles, resource UI. */
 
+.today-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: var(--space-5);
+}
+
+.today-header .screen-title {
+  margin-bottom: 0;
+}
+
+.streak-badge {
+  font-family: var(--font-mono);
+  color: var(--amber);
+  font-size: 14px;
+}
+
+.app-footer {
+  text-align: center;
+  padding: var(--space-4);
+  color: var(--text-muted);
+  font-size: 12px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-primary);
+}
+
 .card {
   background: var(--card);
   border: 1px solid var(--border);

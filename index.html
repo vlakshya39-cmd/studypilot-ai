@@ -45,9 +45,9 @@
 
     <main class="main-content">
       <section id="screen-today" class="screen active">
-        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:var(--space-5);">
-          <h1 class="screen-title" style="margin-bottom:0;">Today</h1>
-          <div id="streak-badge" style="font-family:var(--font-mono); color:var(--amber); font-size:14px;">🔥 0-day streak</div>
+        <div class="today-header">
+          <h1 class="screen-title">Today</h1>
+          <div id="streak-badge" class="streak-badge">🔥 0-day streak</div>
         </div>
         <div id="today-root"></div>
         <div id="heatmap-root"></div>
@@ -65,7 +65,7 @@
     </main>
   </div>
 
-  <footer style="text-align:center; padding:var(--space-4); color:var(--text-muted); font-size:12px; border-top:1px solid var(--border); background:var(--bg-primary);">
+  <footer class="app-footer">
     Built with Claude as part of the AB Talks 60-Day Claude AI Challenge.
   </footer>
 

@@ -1,0 +1,19 @@
+{
+  "name": "studypilot-ai",
+  "version": "1.0.0",
+  "description": "An AI-powered study companion that helps students plan, prioritize, and stay consistent — built as a 10-day capstone for the AB Talks 60-Day Claude AI Challenge.",
+  "private": true,
+  "license": "MIT",
+  "author": "Lakshya Vaishnav",
+  "homepage": "https://studypilot-ai-lakshya.netlify.app/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vlakshya39-cmd/studypilot-ai.git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "netlify dev"
+  }
+}
